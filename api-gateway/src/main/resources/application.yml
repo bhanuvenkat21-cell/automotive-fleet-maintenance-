@@ -1,0 +1,36 @@
+server:
+  port: ${SERVER_PORT:8080}
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates: [ "Path=/auth/**" ]
+        - id: booking-service
+          uri: lb://booking-service
+          predicates: [ "Path=/bookings/**" ]
+        - id: record-service
+          uri: lb://record-service
+          predicates: [ "Path=/records/**" ]
+        - id: billing-service
+          uri: lb://billing-service
+          predicates: [ "Path=/invoices/**" ]
+jwt:
+  secret: ${JWT_SECRET:precisionauto-dev-secret-key-change-in-prod-32b}
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

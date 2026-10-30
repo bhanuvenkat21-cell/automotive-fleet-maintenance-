@@ -1,0 +1,31 @@
+server:
+  port: ${SERVER_PORT:8083}
+spring:
+  application:
+    name: record-service
+  datasource:
+    url: jdbc:h2:mem:recorddb;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+jwt:
+  secret: ${JWT_SECRET:precisionauto-dev-secret-key-change-in-prod-32b}
+  expiration-ms: 3600000
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.value}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
